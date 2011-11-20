@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <!--
+    <parameters>
+        <parameter key="social_good_explore_cardiff_admin.example.class">SocialGood\ExploreCardiff\AdminBundle\Example</parameter>
+    </parameters>
+    
+    -->
+    
+    <services>
+        <service id="social_good_explore_cardiff_admin.admin.placeofinterest" class="SocialGood\ExploreCardiff\AdminBundle\Admin\PlaceOfInterestAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="default" label="placeofinterest"/>
+
+            <argument/>
+            <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest</argument>
+            <argument>SocialGoodExploreCardiffAdminBundle:PlaceOfInterestAdmin</argument>
+        </service>
+    </services>
+    
+</container>
