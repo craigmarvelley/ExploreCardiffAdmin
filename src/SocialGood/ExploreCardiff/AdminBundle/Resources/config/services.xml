@@ -35,6 +35,22 @@
             <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\Challenge</argument>
             <argument>SocialGoodExploreCardiffAdminBundle:ChallengeAdmin</argument>
         </service>
+        
+        <service id="social_good_explore_cardiff_admin.admin.question" class="SocialGood\ExploreCardiff\AdminBundle\Admin\QuestionAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Data" label="Question"/>
+
+            <argument/>
+            <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\Question</argument>
+            <argument>SocialGoodExploreCardiffAdminBundle:QuestionAdmin</argument>
+        </service>
+        
+        <service id="social_good_explore_cardiff_admin.admin.answer" class="SocialGood\ExploreCardiff\AdminBundle\Admin\AnswerAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Data" label="Answer"/>
+
+            <argument/>
+            <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\Answer</argument>
+            <argument>SocialGoodExploreCardiffAdminBundle:AnswerAdmin</argument>
+        </service>
     </services>
     
 </container>
