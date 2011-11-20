@@ -21,8 +21,6 @@ class ImportCommand extends ContainerAwareCommand
         $this
             ->setName('explorecardiff:import')
             ->setDescription('Import places of interest from Foursquare')
-            ->addArgument('latitude', InputArgument::REQUIRED, 'The latitude component of the center coordinate')
-            ->addArgument('longitude', InputArgument::REQUIRED, 'The longitude component of the center coordinate')
             ->addArgument('radius', InputArgument::REQUIRED, 'The radius within which places of interest will be included')
         ;
     }
@@ -43,6 +41,11 @@ class ImportCommand extends ContainerAwareCommand
         $venues = $data->response->groups[0]->items;
         
         $doctrine = $this->getContainer()->get('doctrine');
+        
+        $em = $doctrine->getEntityManager('default');
+        $em->getConnection()->exec($em->getConnection()->getDatabasePlatform()->getTruncateTableSql('PlaceOfInterest'));
+        $em->getConnection()->exec($em->getConnection()->getDatabasePlatform()->getTruncateTableSql('places_categories'));
+        $em->getConnection()->exec($em->getConnection()->getDatabasePlatform()->getTruncateTableSql('Trivia'));
         
         $existingCategories = $doctrine
             ->getRepository('SocialGoodExploreCardiffAdminBundle:Category')
@@ -86,8 +89,6 @@ class ImportCommand extends ContainerAwareCommand
                 
                 
             }
-            
-            $em = $doctrine->getEntityManager('default');
             
             $em->persist($place);
             
