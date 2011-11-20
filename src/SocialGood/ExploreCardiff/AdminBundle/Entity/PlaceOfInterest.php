@@ -166,4 +166,15 @@ class PlaceOfInterest
     {
         return $this->fsid;
     }
+    
+    public function toArray() {
+        
+        return array(
+            'name' => $this->name,
+            'fsid' => $this->fsid,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude
+        );
+        
+    }
 }
