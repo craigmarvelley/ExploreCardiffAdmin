@@ -30,7 +30,14 @@ class DefaultController extends Controller
         foreach($places as $place) {
             $data[] = $place->toArray();
         }
+        
+        $response = 'explore_cardiff_data(';
       
-        return new Response(json_encode($data));
+        $response .= (json_encode($data));
+        
+        $response .= ')';
+        
+        return new Response($response, 200, array('content-type' => 'text/javascript'));
+        
     }
 }

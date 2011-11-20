@@ -55,6 +55,7 @@ class PlaceOfInterest
      * @ORM\Column(name="longitude", type="float")
      */
     private $longitude;
+    
 
 
     /**
