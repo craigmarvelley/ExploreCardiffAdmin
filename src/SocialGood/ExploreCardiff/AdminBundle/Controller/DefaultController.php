@@ -40,4 +40,28 @@ class DefaultController extends Controller
         return new Response($response, 200, array('content-type' => 'text/javascript'));
         
     }
+    
+    /**
+     * @Route("/categories")
+     */
+    public function categoriesAction()
+    {
+        $categories = $this->getDoctrine()
+            ->getRepository('SocialGoodExploreCardiffAdminBundle:Category')
+            ->findAll();
+        
+        $data = array();
+        foreach($categories as $category) {
+            $data[] = $category->toArray();
+        }
+        
+        $response = 'explore_cardiff_data(';
+      
+        $response .= (json_encode($data));
+        
+        $response .= ')';
+        
+        return new Response($response, 200, array('content-type' => 'text/javascript'));
+        
+    }
 }

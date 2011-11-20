@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest;
+use SocialGood\ExploreCardiff\AdminBundle\Entity\Category;
 
 require(__DIR__.'/../../../../../vendor/foursquareasync/EpiCurl.php');
 require(__DIR__.'/../../../../../vendor/foursquareasync/EpiFoursquare.php');
@@ -28,8 +29,6 @@ class ImportCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $latitude = $input->getArgument('latitude');
-        $longitude = $input->getArgument('longitude');
         $radius = $input->getArgument('radius');
         
         $latitude = 51.4824;
@@ -43,6 +42,16 @@ class ImportCommand extends ContainerAwareCommand
         
         $venues = $data->response->groups[0]->items;
         
+        $doctrine = $this->getContainer()->get('doctrine');
+        
+        $existingCategories = $doctrine
+            ->getRepository('SocialGoodExploreCardiffAdminBundle:Category')
+            ->findAll();
+        
+        if(! $existingCategories) {
+            $existingCategories = array();
+        }
+        
         foreach($venues as $venue) {
             
             $place = new PlaceOfInterest;
@@ -51,7 +60,34 @@ class ImportCommand extends ContainerAwareCommand
             $place->setLongitude($venue->location->lng);
             $place->setFsid($venue->id);
             
-            $em = $this->getContainer()->get('doctrine')->getEntityManager('default');
+            foreach($venue->categories as $categoryData) {
+                
+                $found = false;
+                foreach($existingCategories as $existingCategory) {
+                    if($categoryData->id == $existingCategory->getId()) {
+                        $place->addCategory($existingCategory);
+                        $found = true;
+                        break;
+                    }
+                }
+                
+                if($found) {
+                    continue;
+                }
+                
+                $category = new Category();
+                $category->setId($categoryData->id);
+                $category->setName($categoryData->name);
+                $category->setImageURL($categoryData->icon);
+                
+                $place->addCategory($category);
+                
+                $existingCategories[] = $category;
+                
+                
+            }
+            
+            $em = $doctrine->getEntityManager('default');
             
             $em->persist($place);
             

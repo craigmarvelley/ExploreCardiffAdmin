@@ -63,7 +63,7 @@ class PlaceOfInterest
     private $trivia;
     
     /**
-     * @ORM\ManyToMany(targetEntity="Category", inversedBy="places")
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="places", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="places_categories")
      */
     private $categories;
