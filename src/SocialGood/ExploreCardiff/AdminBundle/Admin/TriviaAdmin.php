@@ -10,16 +10,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
-class PlaceOfInterestAdmin extends Admin
+class TriviaAdmin extends Admin
 {
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name')
-            ->add('fsid')
+            ->add('place')
             ->add('description')
-            ->add('latitude')
-            ->add('longitude')
         ;
     }
 
@@ -27,11 +24,8 @@ class PlaceOfInterestAdmin extends Admin
     {
         $formMapper
             ->with('General')
-                ->add('name')
-                ->add('fsid')
+                ->add('place')
                 ->add('description')
-                ->add('latitude')
-                ->add('longitude')
             ->end()
         ;
     }
@@ -39,14 +33,15 @@ class PlaceOfInterestAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('name')
+            ->addIdentifier('place')
+            ->addIdentifier('description')
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
+            ->add('place')
         ;
     }
 
@@ -61,7 +56,7 @@ class PlaceOfInterestAdmin extends Admin
         $id = $admin->getRequest()->get('id');
 
         $menu->addChild(
-            $this->trans('view_place_of_interest'),
+            $this->trans('view_trivia'),
             array('uri' => $admin->generateUrl('edit', array('id' => $id)))
         );
 

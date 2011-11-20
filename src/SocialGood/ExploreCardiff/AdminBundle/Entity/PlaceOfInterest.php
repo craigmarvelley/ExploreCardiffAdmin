@@ -214,4 +214,10 @@ class PlaceOfInterest
     {
         return $this->trivia;
     }
+    
+    public function __toString() {
+        
+        return $this->name;
+        
+    }
 }

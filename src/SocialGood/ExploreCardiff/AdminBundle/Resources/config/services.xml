@@ -19,6 +19,14 @@
             <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest</argument>
             <argument>SocialGoodExploreCardiffAdminBundle:PlaceOfInterestAdmin</argument>
         </service>
+        
+        <service id="social_good_explore_cardiff_admin.admin.trivia" class="SocialGood\ExploreCardiff\AdminBundle\Admin\TriviaAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="default" label="trivia"/>
+
+            <argument/>
+            <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\Trivia</argument>
+            <argument>SocialGoodExploreCardiffAdminBundle:TriviaAdmin</argument>
+        </service>
     </services>
     
 </container>
