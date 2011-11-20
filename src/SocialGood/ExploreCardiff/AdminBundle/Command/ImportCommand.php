@@ -8,6 +8,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest;
+
+require(__DIR__.'/../../../../../vendor/foursquareasync/EpiCurl.php');
+require(__DIR__.'/../../../../../vendor/foursquareasync/EpiFoursquare.php');
+
 class ImportCommand extends ContainerAwareCommand
 {
     protected function configure()
@@ -27,8 +32,32 @@ class ImportCommand extends ContainerAwareCommand
         $longitude = $input->getArgument('longitude');
         $radius = $input->getArgument('radius');
         
+        $latitude = 51.4824;
+        $longitude = -3.1811;
         
+        $output->write("Searching for venues..");
+        
+        $fsObj = new \EpiFoursquare('ED5EZC1KM5MXGV1E43MU42IMYZ2Y2EBCF0WUYXVQRN2QETB4', 'AH2NLG5HFNQRJQKQHZUSFBPQBRBLVJB122CMD1AXLJFF2ZBH');
+        
+        $data = $fsObj->get('/venues/search', array('ll' => sprintf('%s,%s', $latitude, $longitude), 'radius' => $radius));
+        
+        $venues = $data->response->groups[0]->items;
+        
+        foreach($venues as $venue) {
+            
+            $place = new PlaceOfInterest;
+            $place->setName($venue->name);
+            $place->setLatitude($venue->location->lat);
+            $place->setLongitude($venue->location->lng);
+            $place->setFsid($venue->id);
+            
+            $em = $this->getContainer()->get('doctrine')->getEntityManager('default');
+            
+            $em->persist($place);
+            
+        }
+        
+        $em->flush();
 
-        $output->writeln($text);
     }
 }

@@ -82,4 +82,4 @@
 
 [FoursquareAsync]
     git=https://github.com/jmathai/foursquare-async.git
-    target=/vendor/foursquareasync
+    target=/foursquareasync
