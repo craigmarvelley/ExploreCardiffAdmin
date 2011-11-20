@@ -3,6 +3,7 @@
 namespace SocialGood\ExploreCardiff\AdminBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest
@@ -56,7 +57,10 @@ class PlaceOfInterest
      */
     private $longitude;
     
-
+    /**
+     * @ORM\OneToMany(targetEntity="Trivia", mappedBy="place")
+     */
+    private $trivia;
 
     /**
      * Get id
@@ -168,14 +172,46 @@ class PlaceOfInterest
         return $this->fsid;
     }
     
+    public function __construct()
+    {
+        $this->trivia = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add trivia
+     *
+     * @param SocialGood\ExploreCardiff\AdminBundle\Entity\Trivia $trivia
+     */
+    public function addTrivia(\SocialGood\ExploreCardiff\AdminBundle\Entity\Trivia $trivia)
+    {
+        $this->trivia[] = $trivia;
+    }
+    
     public function toArray() {
+        
+        $trivia = array();
+        
+        foreach($this->trivia->toArray() as $triviaObj) {
+            $trivia[] = $triviaObj->getDescription();
+        }
         
         return array(
             'name' => $this->name,
             'fsid' => $this->fsid,
             'latitude' => $this->latitude,
-            'longitude' => $this->longitude
+            'longitude' => $this->longitude,
+            'trivia' => $trivia
         );
         
+    }
+
+    /**
+     * Get trivia
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getTrivia()
+    {
+        return $this->trivia;
     }
 }
