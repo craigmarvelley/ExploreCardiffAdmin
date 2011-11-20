@@ -157,22 +157,55 @@ class DefaultController extends Controller
      */
     public function questionsForCategoryAction($categoryId) {
         
-        $question = new Question;
+        $questionsToReturn = array();
         
-        $place = $this->getDoctrine()
+        // Get all venues for category
+        $places = $this->getDoctrine()
             ->getRepository('SocialGoodExploreCardiffAdminBundle:PlaceOfInterest')
-            ->find($placeId);
+            ->findAll();
         
-        $question->setPlace($place);
-        $question->setDescription($text);
+        $matchedPlaces = array();
         
-        $em = $this->getDoctrine()->getEntityManager();
+        foreach($places as $place) {
+            foreach($place->getCategories() as $category) {
+                if($category->getId() == $categoryId) {
+                    $matchedPlaces[] = $place;
+                    break;
+                }
+            }
+        }
         
-        $em->persist($question);
+        $questions = array();
         
-        $em->flush();
+        foreach($matchedPlaces as $place) {
+            
+            $questions = array_merge($questions, $place->getQuestions()->toArray());
+            
+        }
         
-        return new Response('', 200);
+        $data = array();
+        foreach($questions as $question) {
+            $dataToAdd = array();
+            
+            $dataToAdd['question'] = $question->getDescription();
+            $answers = array();
+            
+            foreach($question->getAnswers() as $answer) {
+                $answers[] = $answer->getDescription();
+            }
+            
+            $dataToAdd['answers'] = $answers;
+            
+            $data[] = $dataToAdd;
+        }
+        
+        $response = 'explore_cardiff_data(';
+      
+        $response .= (json_encode($data));
+        
+        $response .= ')';
+        
+        return new Response($response, 200, array('content-type' => 'text/javascript'));
         
     }
     
