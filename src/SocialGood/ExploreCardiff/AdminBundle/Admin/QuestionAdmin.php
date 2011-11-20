@@ -23,6 +23,7 @@ class QuestionAdmin extends Admin
     {
         $formMapper
             ->with('General')
+                ->add('place')
                 ->add('description')
             ->end()
         ;
