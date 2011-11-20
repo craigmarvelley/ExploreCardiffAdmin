@@ -13,7 +13,7 @@
     
     <services>
         <service id="social_good_explore_cardiff_admin.admin.placeofinterest" class="SocialGood\ExploreCardiff\AdminBundle\Admin\PlaceOfInterestAdmin">
-            <tag name="sonata.admin" manager_type="orm" group="default" label="placeofinterest"/>
+            <tag name="sonata.admin" manager_type="orm" group="Data" label="Place of Interest"/>
 
             <argument/>
             <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest</argument>
@@ -21,11 +21,19 @@
         </service>
         
         <service id="social_good_explore_cardiff_admin.admin.trivia" class="SocialGood\ExploreCardiff\AdminBundle\Admin\TriviaAdmin">
-            <tag name="sonata.admin" manager_type="orm" group="default" label="trivia"/>
+            <tag name="sonata.admin" manager_type="orm" group="Data" label="Trivia"/>
 
             <argument/>
             <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\Trivia</argument>
             <argument>SocialGoodExploreCardiffAdminBundle:TriviaAdmin</argument>
+        </service>
+        
+        <service id="social_good_explore_cardiff_admin.admin.challenge" class="SocialGood\ExploreCardiff\AdminBundle\Admin\ChallengeAdmin">
+            <tag name="sonata.admin" manager_type="orm" group="Data" label="Challenge"/>
+
+            <argument/>
+            <argument>SocialGood\ExploreCardiff\AdminBundle\Entity\Challenge</argument>
+            <argument>SocialGoodExploreCardiffAdminBundle:ChallengeAdmin</argument>
         </service>
     </services>
     
