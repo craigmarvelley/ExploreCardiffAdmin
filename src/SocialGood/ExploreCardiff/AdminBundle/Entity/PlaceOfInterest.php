@@ -72,6 +72,11 @@ class PlaceOfInterest
      * @ORM\JoinTable(name="places_categories")
      */
     private $categories;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Question", mappedBy="place")
+     */
+    private $questions;
 
     /**
      * Get id
@@ -270,5 +275,25 @@ class PlaceOfInterest
     public function getChallenges()
     {
         return $this->challenges;
+    }
+
+    /**
+     * Add questions
+     *
+     * @param SocialGood\ExploreCardiff\AdminBundle\Entity\Question $questions
+     */
+    public function addQuestion(\SocialGood\ExploreCardiff\AdminBundle\Entity\Question $questions)
+    {
+        $this->questions[] = $questions;
+    }
+
+    /**
+     * Get questions
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getQuestions()
+    {
+        return $this->questions;
     }
 }

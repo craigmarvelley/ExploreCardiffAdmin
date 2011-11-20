@@ -5,7 +5,10 @@ namespace SocialGood\ExploreCardiff\AdminBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+use SocialGood\ExploreCardiff\AdminBundle\Entity\Question;
 
 class DefaultController extends Controller
 {
@@ -80,6 +83,96 @@ class DefaultController extends Controller
         }
         
         return $data;
+        
+    }
+    
+    /**
+     * @Route("/questions")
+     * @Method("POST")
+     */
+    public function questionsSaveAction() {
+        
+        $placeId = $this->getRequest()->get('venueId');
+        $text = $this->getRequest()->get('question');
+        
+        $question = new Question;
+        
+        $place = $this->getDoctrine()
+            ->getRepository('SocialGoodExploreCardiffAdminBundle:PlaceOfInterest')
+            ->find($placeId);
+        
+        $question->setPlace($place);
+        $question->setDescription($text);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $em->persist($question);
+        
+        $em->flush();
+        
+        return new Response('', 200);
+        
+    }
+    
+    /**
+     * @Route("/questions/{placeId}")
+     * @Method("GET")
+     */
+    public function questionsAction($placeId)
+    {
+        $questions = $this->getDoctrine()
+            ->getRepository('SocialGoodExploreCardiffAdminBundle:Question')
+            ->findBy(array('place'=>$placeId));
+        
+        $data = array();
+        foreach($questions as $question) {
+            $dataToAdd = array();
+            
+            $dataToAdd['question'] = $question->getDescription();
+            $answers = array();
+            
+            foreach($question->getAnswers() as $answer) {
+                $answers[] = $answer->getDescription();
+            }
+            
+            $dataToAdd['answers'] = $answers;
+            
+            $data[] = $dataToAdd;
+        }
+        
+        $response = 'explore_cardiff_answer(';
+      
+        $response .= (json_encode($data));
+        
+        $response .= ')';
+        
+        return new Response($response, 200, array('content-type' => 'text/javascript'));
+        
+    }
+    
+    
+    
+    /**
+     * @Route("/questionsForCategory/{categoryId}")
+     */
+    public function questionsForCategoryAction($categoryId) {
+        
+        $question = new Question;
+        
+        $place = $this->getDoctrine()
+            ->getRepository('SocialGoodExploreCardiffAdminBundle:PlaceOfInterest')
+            ->find($placeId);
+        
+        $question->setPlace($place);
+        $question->setDescription($text);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $em->persist($question);
+        
+        $em->flush();
+        
+        return new Response('', 200);
         
     }
     
