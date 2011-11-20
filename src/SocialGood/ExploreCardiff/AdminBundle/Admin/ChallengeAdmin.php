@@ -23,6 +23,7 @@ class ChallengeAdmin extends Admin
     {
         $formMapper
             ->with('General')
+                ->add('place')
                 ->add('question')
                 ->add('answer1')
                 ->add('answer2')

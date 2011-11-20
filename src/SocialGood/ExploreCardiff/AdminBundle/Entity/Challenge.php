@@ -20,6 +20,12 @@ class Challenge
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="PlaceOfInterest", inversedBy="challenges")
+     * @ORM\JoinColumn(name="place_id", referencedColumnName="id")
+     */
+    private $place;
 
     /**
      * @var string $question
@@ -192,5 +198,38 @@ class Challenge
     public function getCorrectAnswer()
     {
         return $this->correctAnswer;
+    }
+
+    /**
+     * Set place
+     *
+     * @param SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest $place
+     */
+    public function setPlace(\SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest $place)
+    {
+        $this->place = $place;
+    }
+
+    /**
+     * Get place
+     *
+     * @return SocialGood\ExploreCardiff\AdminBundle\Entity\PlaceOfInterest 
+     */
+    public function getPlace()
+    {
+        return $this->place;
+    }
+    
+    public function toArray() {
+        
+        return array(
+            'question' => $this->getQuestion(),
+            'answer1' => $this->getAnswer1(),
+            'answer2' => $this->getAnswer2(),
+            'answer3' => $this->getAnswer3(),
+            'answer4' => $this->getAnswer4(),
+            'correctAnswer' => $this->getCorrectAnswer()
+        );
+        
     }
 }

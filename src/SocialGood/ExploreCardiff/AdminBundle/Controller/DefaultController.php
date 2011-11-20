@@ -28,7 +28,10 @@ class DefaultController extends Controller
         
         $data = array();
         foreach($places as $place) {
-            $data[] = $place->toArray();
+            $thisVenueData = $place->toArray();
+            $thisVenueData['challenges'] = $this->challengesForPlace($place->getId());
+            $data[] = $thisVenueData;
+            
         }
         
         $response = 'explore_cardiff_data(';
@@ -64,4 +67,20 @@ class DefaultController extends Controller
         return new Response($response, 200, array('content-type' => 'text/javascript'));
         
     }
+    
+    public function challengesForPlace($placeId)
+    {
+        $challenges = $this->getDoctrine()
+            ->getRepository('SocialGoodExploreCardiffAdminBundle:Challenge')
+            ->findBy(array('place'=>$placeId));
+        
+        $data = array();
+        foreach($challenges as $challenge) {
+            $data[] = $challenge->toArray();
+        }
+        
+        return $data;
+        
+    }
+    
 }

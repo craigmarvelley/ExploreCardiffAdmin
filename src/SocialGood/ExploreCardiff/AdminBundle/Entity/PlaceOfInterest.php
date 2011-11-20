@@ -63,6 +63,11 @@ class PlaceOfInterest
     private $trivia;
     
     /**
+     * @ORM\OneToMany(targetEntity="Challenge", mappedBy="place")
+     */
+    private $challenges;
+    
+    /**
      * @ORM\ManyToMany(targetEntity="Category", inversedBy="places", cascade={"persist", "remove"})
      * @ORM\JoinTable(name="places_categories")
      */
@@ -202,8 +207,8 @@ class PlaceOfInterest
         }
         
         return array(
+            'id' => $this->id,
             'name' => $this->name,
-            'fsid' => $this->fsid,
             'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'trivia' => $trivia
@@ -245,5 +250,25 @@ class PlaceOfInterest
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add challenges
+     *
+     * @param SocialGood\ExploreCardiff\AdminBundle\Entity\Challenge $challenges
+     */
+    public function addChallenge(\SocialGood\ExploreCardiff\AdminBundle\Entity\Challenge $challenges)
+    {
+        $this->challenges[] = $challenges;
+    }
+
+    /**
+     * Get challenges
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getChallenges()
+    {
+        return $this->challenges;
     }
 }
