@@ -61,6 +61,12 @@ class PlaceOfInterest
      * @ORM\OneToMany(targetEntity="Trivia", mappedBy="place")
      */
     private $trivia;
+    
+    /**
+     * @ORM\ManyToMany(targetEntity="Category", inversedBy="places")
+     * @ORM\JoinTable(name="places_categories")
+     */
+    private $categories;
 
     /**
      * Get id
@@ -219,5 +225,25 @@ class PlaceOfInterest
         
         return $this->name;
         
+    }
+
+    /**
+     * Add categories
+     *
+     * @param SocialGood\ExploreCardiff\AdminBundle\Entity\Category $categories
+     */
+    public function addCategory(\SocialGood\ExploreCardiff\AdminBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+    }
+
+    /**
+     * Get categories
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }
